@@ -1,108 +1,210 @@
-# UdaPlay - AI Game Research Agent Project
+# UdaPlay - AI-Powered Game Research Agent
 
-## Project Overview
+An intelligent research agent for the video game industry built with RAG (Retrieval-Augmented Generation), semantic search, and agentic workflows. Features multi-source information retrieval, automatic quality assessment, and both standard and advanced implementations with long-term memory capabilities.
 
-UdaPlay is an AI-powered research agent for the video game industry. This project is divided into two main parts that will help you build a sophisticated AI agent capable of answering questions about video games using both local knowledge and web searches.
+## 🎯 Overview
 
-## Project Structure
+UdaPlay is a production-ready AI agent that intelligently answers questions about video games by combining:
+- **Semantic search** over a local vector database of game information
+- **Quality evaluation** of retrieved results using LLM-based assessment
+- **Automatic fallback** to web search when local knowledge is insufficient
+- **Stateful conversations** with session management
+- **Explicit state machine architecture** for transparent, debuggable workflows
 
-### Part 1: Offline RAG (Retrieval-Augmented Generation)
+## ✨ Key Features
 
-In this part, you'll build a Vector Database using ChromaDB to store and retrieve video game information efficiently.
+### Core Capabilities
+- **Multi-Source RAG Pipeline**: Queries vector database, evaluates results, and falls back to web search automatically
+- **Intelligent Retrieval Evaluation**: LLM-powered assessment determines if retrieved documents are sufficient
+- **Stateful Agent Architecture**: Maintains conversation context across multiple queries per session
+- **Tool Integration**: Modular design with pluggable tools for retrieval, evaluation, and web search
+- **Structured Outputs**: Citations, reasoning transparency, and source attribution
 
-Key tasks:
+### Advanced Implementation
+- **Long-Term Memory**: Persistent storage of learned facts using vector embeddings
+- **Explicit State Machine**: Pre-defined tool nodes for deterministic, observable workflows
+- **Conditional Branching**: Dynamic path selection based on retrieval quality
+- **Enhanced State Tracking**: Full visibility into intermediate results at each workflow step
+- **Fact Extraction & Storage**: Automatic identification and persistence of important information
 
-- Set up ChromaDB as a persistent client
-- Create a collection with appropriate embedding functions
-- Process and index game data from JSON files
-- Each game document contains:
-  - Name
-  - Platform
-  - Genre
-  - Publisher
-  - Description
-  - Year of Release
+## 🏗️ Architecture
 
-### Part 2: AI Agent Development
-
-Build an intelligent agent that combines local knowledge with web search capabilities.
-
-The agent will have the following capabilities:
-
-1. Answer questions using internal knowledge (RAG)
-2. Search the web when needed
-3. Maintain conversation state
-4. Return structured outputs
-5. Store useful information for future use
-
-Required Tools to Implement:
-
-1. `retrieve_game`: Search the vector database for game information
-2. `evaluate_retrieval`: Assess the quality of retrieved results
-3. `game_web_search`: Perform web searches for additional information
-
-## Requirements
-
-### Environment Setup
-
-Create a `.env` file with the following API keys:
-
+### Standard Agent Workflow
 ```
-OPENAI_API_KEY="YOUR_KEY"
-CHROMA_OPENAI_API_KEY="YOUR_KEY"
-TAVILY_API_KEY="YOUR_KEY"
+User Query → Retrieve from Vector DB → Evaluate Quality
+                                            ↓
+                          Sufficient? → Generate Answer
+                                 ↓
+                          Insufficient? → Web Search → Generate Answer
 ```
 
-### Project Dependencies
-
-- Python 3.11+
-- ChromaDB
-- OpenAI
-- Tavily
-- dotenv
-
-### Directory Structure
-
+### Advanced Agent Workflow
 ```
-project/
-├── starter/
-│   ├── games/           # JSON files with game data
-│   ├── lib/             # Custom library implementations
-│   │   ├── llm.py       # LLM abstractions
-│   │   ├── messages.py  # Message handling
-│   │   ├── ...
-│   │   └── tooling.py   # Tool implementations
-│   ├── Udaplay_01_starter_project.ipynb  # Part 1 implementation
-│   └── Udaplay_02_starter_project.ipynb  # Part 2 implementation
+User Query → Long-Term Memory Search → Vector DB Search → Quality Evaluation
+                                                               ↓
+                                          Sufficient? → Generate Answer → Extract & Store Facts
+                                                 ↓
+                                          Insufficient? → Web Search → Generate Answer → Extract & Store Facts
 ```
 
-## Getting Started
+## 🛠️ Tech Stack
 
-1. Create and activate a virtual environment
-2. Install required dependencies
-3. Set up your `.env` file with necessary API keys
-4. Follow the notebooks in order:
-   - Complete Part 1 to set up your vector database
-   - Complete Part 2 to implement the AI agent
+**Core Technologies:**
+- **Python 3.11+** - Primary language
+- **ChromaDB** - Vector database for semantic search
+- **OpenAI API** - LLM for generation and embeddings (text-embedding-3-small)
+- **Tavily API** - Web search integration
+- **Pydantic** - Data validation and structured outputs
 
-## Testing Your Implementation
+**Custom Frameworks:**
+- **State Machine Engine** - Custom TypedDict-based workflow orchestration
+- **Memory Management** - Short-term (session-based) and long-term (vector-based) memory
+- **Tool System** - Decorator-based tool registration and execution
+- **LLM Abstraction Layer** - Unified interface for OpenAI models
 
-After completing both parts, test your agent with questions like:
+## 📁 Project Structure
 
-- "When was Pokémon Gold and Silver released?"
-- "Which one was the first 3D platformer Mario game?"
-- "Was Mortal Kombat X released for PlayStation 5?"
+```
+gaming-research-agent-ai/
+├── games/                                    # Game data corpus (JSON)
+├── lib/                                      # Core library implementations
+│   ├── agents.py                            # Agent orchestration & state machine
+│   ├── llm.py                               # LLM interface abstractions
+│   ├── memory.py                            # Short-term & long-term memory
+│   ├── messages.py                          # Message type definitions
+│   ├── state_machine.py                     # Workflow engine
+│   ├── tooling.py                           # Tool decorator & execution
+│   ├── vector_db.py                         # Vector store management
+│   └── parsers.py                           # Output parsing utilities
+├── chromadb/                                # Persistent vector database
+├── Udaplay_01_solution_project.ipynb        # RAG pipeline implementation
+├── Udaplay_02_solution_project.ipynb        # Standard agent implementation
+├── Udaplay_03_solution_advanced_project.ipynb # Advanced agent with LTM
+└── requirements.txt                         # Python dependencies
+```
 
-## Advanced Features
+## 🚀 Quick Start
 
-After completing the basic implementation, you can enhance your agent with:
+### Installation
 
-- Long-term memory capabilities
-- Additional tools and capabilities
+```bash
+# Clone the repository
+git clone <repository-url>
+cd gaming-research-agent-ai
 
-## Notes
+# Create virtual environment
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
 
-- Make sure to implement proper error handling
-- Follow best practices for API key management
-- Document your code thoroughly
-- Test your implementation with various types of queries
+# Install dependencies
+pip install -r requirements.txt
+```
+
+### Configuration
+
+Create a `.env` file with your API keys:
+
+```env
+OPENAI_API_KEY="your_openai_api_key"
+TAVILY_API_KEY="your_tavily_api_key"
+```
+
+### Usage
+
+#### 1. Build Vector Database (Notebook 01)
+```python
+# Initialize ChromaDB and process game data
+chroma_client = chromadb.PersistentClient(path="./chromadb")
+collection = chroma_client.create_collection("udaplay_games")
+
+# Load and index game documents
+# Documents include: Name, Platform, Genre, Publisher, Description, Year
+```
+
+#### 2. Run Standard Agent (Notebook 02)
+```python
+from lib.agents import Agent
+
+agent = Agent(
+    model_name="gpt-4o-mini",
+    instructions="...",
+    tools=[retrieve_game, evaluate_retrieval, game_web_search]
+)
+
+run = agent.invoke("When was Pokémon Gold and Silver released?", session_id="demo")
+```
+
+#### 3. Run Advanced Agent (Notebook 03)
+```python
+from lib.memory import LongTermMemory
+
+advanced_agent = AdvancedAgent(model_name="gpt-4o-mini")
+run = advanced_agent.invoke(
+    query="When was Super Mario 64 released?",
+    session_id="session_1",
+    owner="user_1"
+)
+```
+
+## 🔍 Example Queries
+
+The agent handles various query types:
+
+**Factual Queries:**
+- "When was Pokémon Gold and Silver released?" → Uses vector DB
+- "What platform was Gran Turismo originally on?" → Uses vector DB
+
+**Complex Queries:**
+- "Which was the first 3D platformer Mario game?" → Semantic search + reasoning
+- "Was Mortal Kombat X released for PlayStation 5?" → Multi-source verification
+
+**Recent/Missing Data:**
+- "When is GTA VI expected to release?" → Automatic web search fallback
+
+## 📊 Implementation Highlights
+
+### Three-Tool RAG Architecture
+1. **`retrieve_game`**: Semantic search over game vector database
+2. **`evaluate_retrieval`**: LLM-based quality assessment of retrieved documents
+3. **`game_web_search`**: Tavily-powered web search as fallback mechanism
+
+### State Machine Design
+- **TypedDict-based state schemas** for type safety
+- **Generic step functions** with automatic state merging
+- **Conditional transitions** based on runtime evaluation
+- **Complete execution history** via snapshots
+
+### Memory Systems
+- **Short-term**: Session-scoped conversation history
+- **Long-term**: Persistent vector-based fact storage with semantic retrieval
+
+## 🎓 Technical Achievements
+
+- Built custom state machine engine with TypedDict support and generic types
+- Implemented RAG evaluation pattern with LLM-as-judge architecture
+- Designed modular tool system with decorator-based registration
+- Created dual-memory architecture (ephemeral + persistent)
+- Implemented explicit state machine with pre-defined tool nodes for production observability
+
+## 📝 Documentation
+
+Each notebook contains:
+- Detailed implementation explanations
+- Code documentation and comments
+- Example outputs with reasoning traces
+- Performance metrics (token usage)
+- Comparison tables (Standard vs. Advanced)
+
+## 🔐 Security Notes
+
+- API keys managed via environment variables (`.env`)
+- `.gitignore` configured to exclude sensitive files
+- No hardcoded credentials in codebase
+
+## 📄 License
+
+This project is available for portfolio and educational purposes.
+
+---
+
+**Built with:** Python • ChromaDB • OpenAI • LangChain Patterns • RAG • Agentic AI
