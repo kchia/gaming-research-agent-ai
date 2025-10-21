@@ -1,5 +1,9 @@
 from typing import List
-import pdfplumber
+try:
+    import pdfplumber
+    PDFPLUMBER_AVAILABLE = True
+except ImportError:
+    PDFPLUMBER_AVAILABLE = False
 from lib.documents import Corpus, Document
 
 
@@ -28,6 +32,9 @@ class PDFLoader:
         self.pdf_path = pdf_path
 
     def load(self) -> Document:
+        if not PDFPLUMBER_AVAILABLE:
+            raise ImportError("pdfplumber is required for PDFLoader. Install it with: pip install pdfplumber")
+
         corpus = Corpus()
 
         with pdfplumber.open(self.pdf_path) as pdf:
